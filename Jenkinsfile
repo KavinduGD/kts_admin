@@ -1,13 +1,14 @@
 pipeline {
     agent any
 
-    // environment {
-    //     // DOCKER_IMAGE = "kts-backend"
-    //     // DOCKER_USERNAME="kavinduorg"
-    //     // DOCKERHUB_PASS=credentials('dockerhub-pass')
+    environment {
+        VITE_GOOGLE_API_KEY = credentials('vite-google-api-key')
+        DOCKER_IMAGE = "kts-admin"
+        DOCKER_USERNAME="kavinduorg"
+        DOCKERHUB_PASS=credentials('dockerhub-pass')
     //     // DEPLOY_TOKEN=credentials('deploy-token')
     //     // DEPLOY_SERVER_IP = "10.0.101.197"
-    // }
+    }
 
     stages{
         stage('Build'){
@@ -55,31 +56,31 @@ pipeline {
             }
         }
 
-    //      stage('Build Docker Image') {
-    //         steps {
-    //             sh '''
-    //             docker build -f Dockerfile.prod -t $DOCKER_USERNAME/$DOCKER_IMAGE:latest .              
-    //             '''
-    //         }
-    //     }
+         stage('Build Docker Image') {
+            steps {
+                sh '''
+                docker build -f Dockerfile.prod -t $DOCKER_USERNAME/$DOCKER_IMAGE:latest  --build-arg VITE_GOOGLE_API_KEY=$VITE_GOOGLE_API_KEY .              
+                '''
+            }
+        }
 
-    //     stage('Login to Docker Hub') {
-    //         steps {
+        stage('Login to Docker Hub') {
+            steps {
                 
-    //             sh '''
-    //              echo $DOCKERHUB_PASS | docker login -u $DOCKER_USERNAME --password-stdin
-    //             '''
+                sh '''
+                 echo $DOCKERHUB_PASS | docker login -u $DOCKER_USERNAME --password-stdin
+                '''
                 
-    //         }
-    //     }
+            }
+        }
 
-    //     stage('Push Image to Docker Hub') {
-    //         steps {
-    //             sh '''
-    //             docker push $DOCKER_USERNAME/$DOCKER_IMAGE:latest 
-    //             '''
-    //         }
-    //     }
+        stage('Push Image to Docker Hub') {
+            steps {
+                sh '''
+                docker push $DOCKER_USERNAME/$DOCKER_IMAGE:latest 
+                '''
+            }
+        }
 
     //     // curl exits with exit code 0 if the HTTP response code is 2xx or 3xx
     //     // and with exit error code 22 for 4xx or 5xx responses
