@@ -2,11 +2,6 @@ name: kts
 
 services:
   admin:
-    build:
-      context: .
-      dockerfile: Dockerfile.prod
-      args:
-        - VITE_GOOGLE_API_KEY=${VITE_GOOGLE_API_KEY}
-    image: 767397975047.dkr.ecr.ap-south-1.amazonaws.com/kts/admin:latest
+    image: kavinduorg/kts-admin:latest
     ports:
-      - 3000:80
+      - 5173:5173
