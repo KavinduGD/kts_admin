@@ -1,13 +1,13 @@
 pipeline {
     agent any
 
-    environment {
-        // DOCKER_IMAGE = "kts-backend"
-        // DOCKER_USERNAME="kavinduorg"
-        // DOCKERHUB_PASS=credentials('dockerhub-pass')
-        // DEPLOY_TOKEN=credentials('deploy-token')
-        // DEPLOY_SERVER_IP = "10.0.101.197"
-    }
+    // environment {
+    //     // DOCKER_IMAGE = "kts-backend"
+    //     // DOCKER_USERNAME="kavinduorg"
+    //     // DOCKERHUB_PASS=credentials('dockerhub-pass')
+    //     // DEPLOY_TOKEN=credentials('deploy-token')
+    //     // DEPLOY_SERVER_IP = "10.0.101.197"
+    // }
 
 
     stages {
