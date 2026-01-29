@@ -6,8 +6,8 @@ pipeline {
         DOCKER_IMAGE = "kts-admin"
         DOCKER_USERNAME="kavinduorg"
         DOCKERHUB_PASS=credentials('dockerhub-pass')
-    //     // DEPLOY_TOKEN=credentials('deploy-token')
-    //     // DEPLOY_SERVER_IP = "10.0.101.197"
+        DEPLOY_TOKEN=credentials('deploy-token')
+        DEPLOY_SERVER_IP = "10.0.101.197"
     }
 
     stages{
@@ -82,27 +82,27 @@ pipeline {
             }
         }
 
-    //     // curl exits with exit code 0 if the HTTP response code is 2xx or 3xx
-    //     // and with exit error code 22 for 4xx or 5xx responses
-    //     stage('Deploy') {
-    //         steps {
-    //             sh '''
-    //             curl --fail -X POST http://$DEPLOY_SERVER_IP:3000/backend-deploy \
-    //                 -H "x-deploy-token: $DEPLOY_TOKEN"
-    //             ''' 
-    //         }
-    //     }
+        // curl exits with exit code 0 if the HTTP response code is 2xx or 3xx
+        // and with exit error code 22 for 4xx or 5xx responses
+        stage('Deploy') {
+            steps {
+                sh '''
+                curl --fail -X POST http://$DEPLOY_SERVER_IP:3000/admin-deploy \
+                    -H "x-deploy-token: $DEPLOY_TOKEN"
+                ''' 
+            }
+        }
 
 
-    // }
+    }
 
-    //  post {
-    //     always {
-    //          sh '''
-    //         docker logout || true
-    //         docker rmi $DOCKER_USERNAME/$DOCKER_IMAGE:latest || true
-    //         '''
-    //     }
+     post {
+        always {
+             sh '''
+            docker logout || true
+            docker rmi $DOCKER_USERNAME/$DOCKER_IMAGE:latest || true
+            '''
+        }
     }
 }
 
