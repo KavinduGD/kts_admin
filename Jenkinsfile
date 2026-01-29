@@ -16,7 +16,8 @@ pipeline {
             steps{
                 sh '''
                     pwd
-                    ls
+                    ls -la
+                    echo "This is a test stage"
                 '''
             }
         }
