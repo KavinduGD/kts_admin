@@ -9,7 +9,7 @@ pipeline {
     //     // DEPLOY_SERVER_IP = "10.0.101.197"
     // }
 
-
+    stages{
         stage('Build'){
             agent{
                 docker{
