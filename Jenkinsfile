@@ -10,61 +10,50 @@ pipeline {
     // }
 
 
-    stages {
-
-        stage('Test'){
+        stage('Build'){
+            agent{
+                docker{
+                    image 'node:22-alpine'
+                    reuseNode true
+                    args '-u root' 
+                }
+            }
             steps{
                 sh '''
-                    pwd
-                    ls -la
-                    echo "This is a test stage"
+                    npm install
+                    npm run build
                 '''
             }
         }
 
-    //     stage('Build'){
-    //         agent{
-    //             docker{
-    //                 image 'node:20-alpine'
-    //                 reuseNode true
-    //                 args '-u root' 
-    //             }
-    //         }
-    //         steps{
-    //             sh '''
-    //                 npm install
-    //             '''
-    //         }
-    //     }
+        stage('Test') {
+            steps {
+                sh '''
+                    echo "Running tests..."
+                '''
+            }
+        }
 
-    //     stage('Test') {
-    //         steps {
-    //             sh '''
-    //                 echo "Running tests..."
-    //             '''
-    //         }
-    //     }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarQubeScanner'
+                    withSonarQubeEnv('sonarqube') {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner
+                        """
+                    }
+                }
+            }
+        }
 
-    //     stage('SonarQube Analysis') {
-    //         steps {
-    //             script {
-    //                 def scannerHome = tool 'SonarQubeScanner'
-    //                 withSonarQubeEnv('sonarqube') {
-    //                     sh """
-    //                         ${scannerHome}/bin/sonar-scanner
-    //                     """
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     stage('Quality Gate') {
-    //         steps {
-    //             timeout(time: 1, unit: 'HOURS') {
-    //                 waitForQualityGate abortPipeline: true
-    //             }
-    //         }
-    //     }
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
 
     //      stage('Build Docker Image') {
     //         steps {
